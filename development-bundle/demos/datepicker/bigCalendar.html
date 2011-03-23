@@ -42,6 +42,7 @@
 		.floatLt{float:left}
 		.floatRt{float:right;}
 		.clear{clear:both}
+		.ui-datepicker td span{ display:inline}
 	</style>
 </head>
 <body>
@@ -248,35 +249,41 @@
 	BigCal.MonthTxtToNum['December']=12;	
 	
 	var Events = {};
-	
+	Events.EId=0;
 	Events.AutoSugg = new Array();
 	Events.AutoSugg['kei']="Keith Basile, Keith Basile, Keith Lebousky";
 	Events.AutoSugg['sar']="Sara Wallace, Saratoga Minnesota, Sardinia";
 	Events.AutoSugg['c']="cccccc";
 	
 	Events.CreateEvent = {
+		setter:'Dat',
 		init:function(){
 			$("#createEvent").live('click',function(){
 				Events.CreateEvent.getValues();
 			});
 		},
 		getValues:function(){
+			Events.EId++;
+			var eId = Events.EId+Events.CreateEvent.setter;
+			
 			var eventTitle = $("#eventTitle").val();
 			var startDate = $("#setDateFrom").val();
 			var endDate = $("#selDateTo").val();
 			var startHour = $("#startHour").val();
 			var startMin = $("#startMinute").val();
 			var startAmPm = $("#startAmPm").val();
-			startDate = startDate.slice(2,3);
+			var startDateA = startDate.indexOf("/")+1;
+			var startDateB = startDate.lastIndexOf("/");
+			startDate = startDate.slice(startDateA,startDateB);
 			if (eventTitle !== "" ) {
-				console.log(eventTitle);			
+							
 				$('td').each(function(){
 					var insert = "";
 					
 					if ($(this).children('a').text() == startDate) {
-						insert += '<div class="eventBox">';
-						insert += '<div class="floatLt">' + eventTitle + '</div>';
-						insert += '<div class="floatRt">' + startHour + ':' + startMin + ' ' + startAmPm + '</div>';
+						insert += '<div class="eventBox" id="'+eId+'">';
+						insert += '<div class="floatLt eventT">' + eventTitle + '</div>';
+						insert += '<div class="floatRt eventH"><span class="eventStH">' + startHour + '</span>:<span class="eventStM">' + startMin + '</span><span class="eventAP">' + startAmPm + '</span></div>';
 						insert += '<div class="clear"></div>';
 						insert += '</div>';
 						$(this).append(insert);
@@ -286,6 +293,7 @@
 			}else{
 				alert("Please include required fileds (*)")
 			}
+			$("#dialog").dialog("close");
 		}
 	}
 	Events.EventBox = {
@@ -293,7 +301,10 @@
 			$(".eventBox").live('click',function(){
 				//need to prevent default
 				
-				alert("im in here");
+				var eTitle = $(this).children('.eventT').text();
+				var eHour = $(this).children('.eventH').text();
+				
+				return false;
 			})
 		}
 	}
