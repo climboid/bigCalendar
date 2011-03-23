@@ -289,6 +289,7 @@
 						$(this).append(insert);
 					}
 				});
+				$("#eventTitle, #setDateFrom, #selDateTo, #startHour, #startMinute,#startAmPm").val('');
 				Events.EventBox.init();
 			}else{
 				alert("Please include required fileds (*)")
@@ -302,8 +303,16 @@
 				//need to prevent default
 				
 				var eTitle = $(this).children('.eventT').text();
-				var eHour = $(this).children('.eventH').text();
+				var eHour = $(this).children(".eventH").children('.eventStH').text();
 				
+				var eMin = $(this).children(".eventH").children('.eventStM').text();
+				var eAP = $(this).children(".eventH").children('.eventAP').text();
+
+				console.log("hour"+eHour+" min "+eMin+" AM or PM "+eAP);
+				$("#dialog").dialog("open").find('#eventTitle').val(eTitle);
+				$("#dialog").find("#startHour").val(eHour);
+				$("#dialog").find("#startMinute").val(eMin);
+				$("#dialgo").find("#startAmPm").val(eAP);
 				return false;
 			})
 		}
@@ -339,6 +348,10 @@
 									
 			}
 			return false;
+		});
+		
+		$(".ui-icon-closethick").click(function(){
+			$("#eventTitle, #setDateFrom, #selDateTo, #startHour, #startMinute,#startAmPm").val('');
 		});
 		//highlight the entire day block not just the number
 		$(".ui-datepicker-today").addClass('ui-state-highlight').children('a').removeClass('ui-state-highlight');
